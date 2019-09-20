@@ -9,7 +9,7 @@
     </parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>docker-swarm</artifactId>
-    <version>1.8</version>
+    <version>1.8-NXBT-3011</version>
     <packaging>hpi</packaging>
 
     <name>Docker Swarm Plugin</name>

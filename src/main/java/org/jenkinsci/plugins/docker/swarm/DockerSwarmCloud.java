@@ -27,6 +27,7 @@ import com.github.dockerjava.core.SSLConfig;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jenkinsci.plugins.docker.commons.credentials.DockerServerCredentials;
 import org.jenkinsci.plugins.docker.commons.credentials.DockerServerEndpoint;
 import org.jenkinsci.plugins.docker.swarm.docker.api.ping.PingRequest;
@@ -87,7 +88,17 @@ public class DockerSwarmCloud extends Cloud {
 
     @Override
     public boolean canProvision(final Label label) {
-        return getLabels().contains(label.getName());
+        try {
+            return getLabels().contains(label.getName());
+        } catch (NullPointerException e) {
+            LOGGER.warning("Catched NPE: " + ExceptionUtils.getFullStackTrace(e));
+            LOGGER.finest("labels: " + getLabels());
+            LOGGER.finest("label: " + label);
+            LOGGER.finest("label desc: " + label.getDescription());
+            LOGGER.finest("label nodes: " + label.getNodes());
+            LOGGER.finest("label nodes: " + label.getClouds());
+            return false;
+        }
     }
 
     public DockerServerEndpoint getDockerHost() {
